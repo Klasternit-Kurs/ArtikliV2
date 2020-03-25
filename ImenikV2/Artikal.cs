@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 namespace ImenikV2
 {
 	[Serializable]
-	class Artikal : INotifyPropertyChanged
+	public class Artikal : INotifyPropertyChanged
 	{
+		public static List<PromenaCene> Kalkulacije = new List<PromenaCene>();
+
 		public string Sifra { get; set; }
 		public string Naziv { get; set; }
 
@@ -28,16 +30,25 @@ namespace ImenikV2
 			}
 		}
 
-		private int marza;
 		public int Marza 
 		{ 
 			get
 			{
-				return marza;
+				foreach(PromenaCene p in Artikal.Kalkulacije.Reverse<PromenaCene>())
+				{
+					if (DateTime.Now > p.Vreme && p.NoveMarze.ContainsKey(this))
+					{
+						return p.NoveMarze[this];
+					}
+				}
+				return 0; //Pro forme
 			}
+
 			set
 			{
-				marza = value;
+				var Promena = new PromenaCene();
+				Promena.NoveMarze.Add(this, value);
+				Artikal.Kalkulacije.Add(Promena);
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Marza"));
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IzlaznaCena"));
 			}
@@ -62,7 +73,7 @@ namespace ImenikV2
 				{
 					kolicina = 0;
 				}
-				PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Kolicina"));
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Kolicina"));
 			}
 		}
 

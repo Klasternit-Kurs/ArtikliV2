@@ -61,6 +61,7 @@ namespace ImenikV2
 		public MainWindow()
 		{
 			InitializeComponent();
+
 			DataContext = new Racun();
 			UniGrid.DataContext = this;
 			dgTrenutniRacun.ItemsSource = (DataContext as Racun).Artikli;
@@ -71,6 +72,13 @@ namespace ImenikV2
 				using (FileStream fs = new FileStream("art.dat", FileMode.Open, FileAccess.Read))
 				{
 					Artikli = bf.Deserialize(fs) as ObservableCollection<Artikal>;
+				}
+			}
+			if (File.Exists("kalk.dat"))
+			{
+				using (FileStream fs = new FileStream("kalk.dat", FileMode.Open, FileAccess.Read))
+				{
+					Artikal.Kalkulacije = bf.Deserialize(fs) as List<PromenaCene>;
 				}
 			}
 
@@ -92,6 +100,10 @@ namespace ImenikV2
 			using (FileStream fs = new FileStream("art.dat", FileMode.Create, FileAccess.Write))
 			{
 				bf.Serialize(fs, Artikli);
+			}
+			using (FileStream fs = new FileStream("kalk.dat", FileMode.Create, FileAccess.Write))
+			{
+				bf.Serialize(fs, Artikal.Kalkulacije);
 			}
 			using (FileStream fs = new FileStream("rac.dat", FileMode.Create, FileAccess.Write))
 			{
@@ -118,8 +130,14 @@ namespace ImenikV2
 						{
 							recnik.Add(a, KolicinaZaRacun);
 						}
+
 						dgTrenutniRacun.ItemsSource = null;
 						dgTrenutniRacun.ItemsSource = (DataContext as Racun).Artikli;
+
+						var temp = (DataContext as Racun).Artikli;
+						(DataContext as Racun).Artikli = null;
+						(DataContext as Racun).Artikli = temp;
+
 						SifraZaRacun = "";
 						KolicinaZaRacun = 0;
 					}
@@ -154,8 +172,21 @@ namespace ImenikV2
 				{
 					art.Kolicina -= rac.Artikli[art];
 				}
-				DataContext = new Racun();
+
 			}
+		}
+
+		private void Izlistaj(object sender, RoutedEventArgs e)
+		{
+			List<Racun> racuni = new List<Racun>();
+			foreach (Racun r in Racuni)
+			{
+				if (r.VremeIzdavanja >= dateOd.SelectedDate && r.VremeIzdavanja <= dateDo.SelectedDate.Value.AddDays(1))
+				{
+					racuni.Add(r);
+				}
+			}
+			dgIzvestaj.ItemsSource = racuni;
 		}
 	}
 }

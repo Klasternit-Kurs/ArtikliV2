@@ -17,9 +17,12 @@ namespace ImenikV2
 			get
 			{
 				decimal t = 0;
-				foreach(Artikal a in Artikli.Keys)
+				if (Artikli != null)
 				{
-					t += a.IzlaznaCena * Artikli[a];
+					foreach (Artikal a in Artikli.Keys)
+					{
+						t += a.IzlaznaCena * Artikli[a];
+					}
 				}
 				return t;
 			}
@@ -35,8 +38,10 @@ namespace ImenikV2
 			set
 			{
 				artikli = value;
-				PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Artikli"));
-				PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Total"));
+
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Artikli"));
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Total"));
+			
 			}
 		}
 

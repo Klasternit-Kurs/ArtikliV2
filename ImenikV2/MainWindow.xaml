@@ -41,11 +41,23 @@
 				</DockPanel>
 				<DataGrid Name="dgRacuni" IsReadOnly="True" ColumnWidth="*" AutoGenerateColumns="False">
 					<DataGrid.Columns>
-						<DataGridTextColumn Header="Datum izdavanja" Binding="{Binding VremeIzdavanja, StringFormat='dddd H:m'}"/>
+						<DataGridTextColumn Header="Datum izdavanja" Binding="{Binding VremeIzdavanja, StringFormat='MM/dd/yyyy H:m'}"/>
 						<DataGridTextColumn Header="Total" Binding="{Binding Total}"/>
 					</DataGrid.Columns>
 				</DataGrid>
 			</StackPanel>
+		</TabItem>
+		<TabItem Header="Izvestaj">
+			<DockPanel>
+				<StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center">
+					<Label Content="Od: "/>
+					<DatePicker Name="dateOd"/>
+					<Label Content="Do: "/>
+					<DatePicker Name="dateDo"/>
+				</StackPanel>
+				<Button DockPanel.Dock="Top" Content="Generisi" Click="Izlistaj"/>
+				<DataGrid Name="dgIzvestaj" IsReadOnly="True" ColumnWidth="*"/>
+			</DockPanel>
 		</TabItem>
 	</TabControl>
 </Window>
