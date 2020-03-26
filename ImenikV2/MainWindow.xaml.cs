@@ -24,10 +24,17 @@ namespace ImenikV2
 	public partial class MainWindow : Window
 	{
 		ObservableCollection<Artikal> Artikli = new ObservableCollection<Artikal>();
+		
+		public string SifraZaRacun { get; set; }
+		public int KolicinaZaRacun { get; set; }
 
 		public MainWindow()
 		{
 			InitializeComponent();
+			DataContext = new Racun();
+			UniGrid.DataContext = this;
+			dgTrenutniRacun.ItemsSource = (DataContext as Racun).Artikli;
+
 			BinaryFormatter bf = new BinaryFormatter();
 			using (FileStream fs = new FileStream("art.dat", FileMode.Open, FileAccess.Read))
 			{
@@ -42,6 +49,20 @@ namespace ImenikV2
 			using (FileStream fs = new FileStream("art.dat", FileMode.Create, FileAccess.Write))
 			{
 				bf.Serialize(fs, Artikli);
+			}
+		}
+
+		private void UnosArtikla(object sender, RoutedEventArgs e)
+		{
+			foreach (Artikal a in Artikli)
+			{
+				if (a.Sifra == SifraZaRacun)
+				{
+					if (a.Kolicina >= KolicinaZaRacun)
+					{
+						(DataContext as Racun).Artikli.Add(a, KolicinaZaRacun);
+					}
+				}
 			}
 		}
 	}

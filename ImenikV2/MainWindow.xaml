@@ -6,8 +6,35 @@
         xmlns:local="clr-namespace:ImenikV2"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" Closing="ZatvaramSe">
-	<DockPanel>
-		<TextBox DockPanel.Dock="Top"/>
-		<DataGrid Name="dg" ColumnWidth="*"/>
-	</DockPanel>
+	<TabControl>
+		<TabItem Header="Artikli">
+			<DockPanel>
+				<TextBox DockPanel.Dock="Top"/>
+				<DataGrid Name="dg" ColumnWidth="*"/>
+			</DockPanel>
+		</TabItem>
+		<TabItem Header="Racuni">
+			<StackPanel>
+				<DockPanel>
+					<StackPanel DockPanel.Dock="Top">
+						<UniformGrid Name="UniGrid" Columns="2">
+							<Label Content="Sifra: " Width="70" HorizontalAlignment="Left"/>
+							<TextBox Text="{Binding SifraZaRacun}"/>
+							<Label Content="Kolicina: "  Width="70" HorizontalAlignment="Left" />
+							<TextBox Text="{Binding KolicinaZaRacun}"/>
+							<Button Content="Unos" Click="UnosArtikla"/>
+						</UniformGrid>
+						<Button Content="Izdaj racun" HorizontalAlignment="Stretch"/>
+						<StackPanel Orientation="Horizontal">
+							<Label Content="Total: "/>
+							<Label Content="{Binding Total}"/>
+						</StackPanel>
+					</StackPanel>
+					
+					<DataGrid Name="dgTrenutniRacun" ColumnWidth="*" />
+				</DockPanel>
+				<DataGrid Name="dgRacuni" IsReadOnly="True" ColumnWidth="*"/>
+			</StackPanel>
+		</TabItem>
+	</TabControl>
 </Window>
