@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace ImenikV2 
 {
+	[Serializable]
 	class Racun : INotifyPropertyChanged
 	{
 		public DateTime VremeIzdavanja { get; set; }
@@ -39,6 +40,7 @@ namespace ImenikV2
 			}
 		}
 
+		[field: NonSerialized]
 		public event PropertyChangedEventHandler PropertyChanged;
 	}
 }

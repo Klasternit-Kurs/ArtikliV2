@@ -22,9 +22,10 @@
 							<TextBox Text="{Binding SifraZaRacun}"/>
 							<Label Content="Kolicina: "  Width="70" HorizontalAlignment="Left" />
 							<TextBox Text="{Binding KolicinaZaRacun}"/>
+							<Label/>
 							<Button Content="Unos" Click="UnosArtikla"/>
 						</UniformGrid>
-						<Button Content="Izdaj racun" HorizontalAlignment="Stretch"/>
+						<Button Content="Izdaj racun" HorizontalAlignment="Stretch" Click="Izdaj"/>
 						<StackPanel Orientation="Horizontal">
 							<Label Content="Total: "/>
 							<Label Content="{Binding Total}"/>
@@ -38,7 +39,12 @@
 						</DataGrid.Columns>
 					</DataGrid>
 				</DockPanel>
-				<DataGrid Name="dgRacuni" IsReadOnly="True" ColumnWidth="*"/>
+				<DataGrid Name="dgRacuni" IsReadOnly="True" ColumnWidth="*" AutoGenerateColumns="False">
+					<DataGrid.Columns>
+						<DataGridTextColumn Header="Datum izdavanja" Binding="{Binding VremeIzdavanja, StringFormat='dddd H:m'}"/>
+						<DataGridTextColumn Header="Total" Binding="{Binding Total}"/>
+					</DataGrid.Columns>
+				</DataGrid>
 			</StackPanel>
 		</TabItem>
 	</TabControl>

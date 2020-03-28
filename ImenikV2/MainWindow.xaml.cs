@@ -15,18 +15,48 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.ComponentModel;
 
 namespace ImenikV2
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window
+	public partial class MainWindow : Window, INotifyPropertyChanged
 	{
 		ObservableCollection<Artikal> Artikli = new ObservableCollection<Artikal>();
-		
-		public string SifraZaRacun { get; set; }
-		public int KolicinaZaRacun { get; set; }
+		ObservableCollection<Racun> Racuni = new ObservableCollection<Racun>();
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		private string sifraZaRacun;
+		public string SifraZaRacun 
+		{ 
+			get
+			{
+				return sifraZaRacun;
+			}
+			set
+			{
+				sifraZaRacun = value;
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SifraZaRacun"));
+			}
+		}
+
+		private int kolicinaZaRacun;
+		public int KolicinaZaRacun 
+		{ 
+			get
+			{
+				return kolicinaZaRacun;
+			}
+				
+			set
+			{
+				kolicinaZaRacun = value;
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("KolicinaZaRacun"));
+			}
+		}
 
 		public MainWindow()
 		{
@@ -34,12 +64,25 @@ namespace ImenikV2
 			DataContext = new Racun();
 			UniGrid.DataContext = this;
 			dgTrenutniRacun.ItemsSource = (DataContext as Racun).Artikli;
-
+			
 			BinaryFormatter bf = new BinaryFormatter();
-			using (FileStream fs = new FileStream("art.dat", FileMode.Open, FileAccess.Read))
+			if (File.Exists("art.dat"))
 			{
-				Artikli = bf.Deserialize(fs) as ObservableCollection<Artikal>;
+				using (FileStream fs = new FileStream("art.dat", FileMode.Open, FileAccess.Read))
+				{
+					Artikli = bf.Deserialize(fs) as ObservableCollection<Artikal>;
+				}
 			}
+
+			if (File.Exists("rac.dat"))
+			{
+				using (FileStream fs = new FileStream("rac.dat", FileMode.Open, FileAccess.Read))
+				{
+					Racuni = bf.Deserialize(fs) as ObservableCollection<Racun>;
+				}
+			}
+
+			dgRacuni.ItemsSource = Racuni;
 			dg.ItemsSource = Artikli;
 		}
 
@@ -49,6 +92,10 @@ namespace ImenikV2
 			using (FileStream fs = new FileStream("art.dat", FileMode.Create, FileAccess.Write))
 			{
 				bf.Serialize(fs, Artikli);
+			}
+			using (FileStream fs = new FileStream("rac.dat", FileMode.Create, FileAccess.Write))
+			{
+				bf.Serialize(fs, Racuni);
 			}
 		}
 
@@ -89,6 +136,25 @@ namespace ImenikV2
 			{
 				SifraZaRacun = ((KeyValuePair<Artikal, int>)dg.SelectedItem).Key.Sifra;
 				KolicinaZaRacun = ((KeyValuePair<Artikal, int>)dg.SelectedItem).Value;
+			} else
+			{
+				SifraZaRacun = "";
+				KolicinaZaRacun = 0;
+			}
+		}
+
+		private void Izdaj(object sender, RoutedEventArgs e)
+		{
+			var rac = DataContext as Racun;
+			if (rac.Artikli.Count > 0)
+			{
+				rac.VremeIzdavanja = DateTime.Now;
+				Racuni.Add(rac);
+				foreach (Artikal art in rac.Artikli.Keys)
+				{
+					art.Kolicina -= rac.Artikli[art];
+				}
+				DataContext = new Racun();
 			}
 		}
 	}
