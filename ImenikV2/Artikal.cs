@@ -23,8 +23,8 @@ namespace ImenikV2
 			set
 			{
 				ulaznaCena = value;
-				PropertyChanged.Invoke(this, new PropertyChangedEventArgs("UlaznaCena"));
-				PropertyChanged.Invoke(this, new PropertyChangedEventArgs("IzlaznaCena"));
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("UlaznaCena"));
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IzlaznaCena"));
 			}
 		}
 
@@ -38,8 +38,8 @@ namespace ImenikV2
 			set
 			{
 				marza = value;
-				PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Marza"));
-				PropertyChanged.Invoke(this, new PropertyChangedEventArgs("IzlaznaCena"));
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Marza"));
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IzlaznaCena"));
 			}
 		}
 

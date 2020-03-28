@@ -60,9 +60,35 @@ namespace ImenikV2
 				{
 					if (a.Kolicina >= KolicinaZaRacun)
 					{
-						(DataContext as Racun).Artikli.Add(a, KolicinaZaRacun);
+						var recnik = (DataContext as Racun).Artikli;
+						if (KolicinaZaRacun == 0)
+						{
+							recnik.Remove(a);
+						} else if (recnik.ContainsKey(a))
+						{
+							recnik[a] = KolicinaZaRacun;
+						} else
+						{
+							recnik.Add(a, KolicinaZaRacun);
+						}
+						dgTrenutniRacun.ItemsSource = null;
+						dgTrenutniRacun.ItemsSource = (DataContext as Racun).Artikli;
+						SifraZaRacun = "";
+						KolicinaZaRacun = 0;
 					}
 				}
+			}
+		}
+
+		private void PromenaSelekcije(object sender, SelectionChangedEventArgs e)
+		{
+			var dg = sender as DataGrid;
+
+
+			if (dg.SelectedItem != null)
+			{
+				SifraZaRacun = ((KeyValuePair<Artikal, int>)dg.SelectedItem).Key.Sifra;
+				KolicinaZaRacun = ((KeyValuePair<Artikal, int>)dg.SelectedItem).Value;
 			}
 		}
 	}

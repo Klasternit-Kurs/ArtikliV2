@@ -30,8 +30,13 @@
 							<Label Content="{Binding Total}"/>
 						</StackPanel>
 					</StackPanel>
-					
-					<DataGrid Name="dgTrenutniRacun" ColumnWidth="*" />
+					<DataGrid Name="dgTrenutniRacun" ColumnWidth="*" AutoGenerateColumns="False" SelectionChanged="PromenaSelekcije">
+						<DataGrid.Columns>
+							<DataGridTextColumn Header="Sifra artikla" Binding="{Binding Key.Sifra}"/>
+							<DataGridTextColumn Header="Naziv artikla" Binding="{Binding Key.Naziv}"/>
+							<DataGridTextColumn Header="Kolicina" Binding="{Binding Value}"/>
+						</DataGrid.Columns>
+					</DataGrid>
 				</DockPanel>
 				<DataGrid Name="dgRacuni" IsReadOnly="True" ColumnWidth="*"/>
 			</StackPanel>
